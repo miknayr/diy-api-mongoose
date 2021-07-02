@@ -6,29 +6,49 @@ db.connect()
 // config our express app
 
 const app = express()
-const PORT = 3000
+const PORT = 3001
 
 const rowdy = require('rowdy-logger')
 const rowdyResults = rowdy.begin(app)
-
+const cors = require('cors')
 
 
 // request body middleware
 app.use(express.urlencoded({ extended: false }))
+app.use(cors())
 
 // test index route / -- return a server message
 app.get('/', (req, res) => {
   res.json({ msg: '🛠🛠🛠hello! its DIY Time 🛠🛠🛠'})
 })
 
+// // GET /blog -- READ all posts from the db
+// app.get('/blog', async (req, res) => {
+//   try {
+//     const posts = await db.Blog.find({})
+//     console.log('🐈 +++ ' + posts)
+
+//     res.json({posts})
+//     // res.send({posts})
+//   } catch(err) {
+//     console.log(err)
+//   }
+// })
+
 // GET /blog -- READ all posts from the db
-app.get('/blog', async (req, res) => {
-  try {
-    const posts = await db.Blog.find({})
-    res.json({posts})
-  } catch(err) {
-    console.log(err)
-  }
+app.get('/blog', (req, res) => {
+    db.Blog.find({})
+    .then(blogData => res.send(blogData))
+})
+
+// GET /blog/:id -- READ one specific post from the db
+app.get('/blog/:id', (req, res) => {
+  db.Blog.findById(req.params.id)
+    .then(result => {
+        res.json(result)
+        res.redirect(`/blog/${req.params.id}`) /// <--- sopmething needs to change here  due to err_http_headers_send, need to figure out which one should be which.
+    })
+    .catch(err => console.log(err))
 })
 
 // POST /blog -- CREATE one post redirect to /blog
