@@ -31,33 +31,21 @@ app.get('/blog', async (req, res) => {
   }
 })
 
-// POST /blog -- CREATE one drink redirect to /blog
-app.post('/blog', async (req, res) => {
-  try {
-    const newPost = await db.Blog.create({
-      author: req.body.author,
-      title: req.body.title,
-      content: req.body.content
-    })
-    res.json({newPost})
-
-  } catch(err) {
-    console.log(err)
-  }
-
-  // db.Blog.create({
-  //   author: req.body.author,
-  //   title: req.body.title,
-  //   content: req.body.content
-  // })
-  // .then (() => {
-  //   res.redirect('/blog')
-  // })
-  // .catch (err=> console.log(err))
+// POST /blog -- CREATE one post redirect to /blog
+app.post('/blog', (req, res) => {
+  db.Blog.create({
+    author: req.body.author,
+    title: req.body.title,
+    content: req.body.content
+  })
+  .then (() => {
+    res.redirect('/blog')
+  })
+  .catch (err=> console.log(err))
 
 })
 
-// PUT /blog/:id -- UPDATE one drink and redirect to /drinks
+// PUT /blog/:id -- UPDATE one post and redirect to /blog
 
 app.put('/blog/:id', (req, res) => {
   db.Blog.findById(req.params.id)
@@ -66,11 +54,11 @@ app.put('/blog/:id', (req, res) => {
     foundPost.title = req.body.title
     foundPost.content = req.body.content
 
-      foundPost.save()
-      .then(() => {
-        res.redirect('/blog')
-      })
-      .catch ((err) => console.log(err))
+    foundPost.save()
+    .then(() => {
+      res.redirect('/blog')
+    })
+    .catch ((err) => console.log(err))
   })
   .catch ((err) => console.log(err))
 })
