@@ -45,21 +45,23 @@ app.get('/blog', (req, res) => {
 app.get('/blog/:id', (req, res) => {
   db.Blog.findById(req.params.id)
     .then(result => {
-        res.json(result)
-        res.redirect(`/blog/${req.params.id}`) /// <--- sopmething needs to change here  due to err_http_headers_send, need to figure out which one should be which.
+      res.json(result)
+      res.redirect(`/blog/${req.params.id}`) /// <--- sopmething needs to change here  due to err_http_headers_send, need to figure out which one should be which.
     })
     .catch(err => console.log(err))
 })
 
 // POST /blog -- CREATE one post redirect to /blog
-app.post('/blog', (req, res) => {
+app.post('/newpost', (req, res) => {
+  console.log('*** got a /newpost request: ', req.body, req.params, req.query)
   db.Blog.create({
     author: req.body.author,
     title: req.body.title,
     content: req.body.content
   })
   .then (() => {
-    res.redirect('/blog')
+    console.log('*** newpost created maybe, redirecting')
+    res.redirect('http://localhost:3000/blog')
   })
   .catch (err=> console.log(err))
 
