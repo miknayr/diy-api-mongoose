@@ -69,7 +69,8 @@ app.post('/newpost', (req, res) => {
 
 // PUT /blog/:id -- UPDATE one post and redirect to /blog
 
-app.put('/blog/:id', (req, res) => {
+app.put('/edit/:id', (req, res) => {
+  console.log('*** got a /edit request: ', req.body, req.params, req.query)
   db.Blog.findById(req.params.id)
   .then(foundPost => {
     foundPost.author = req.body.author
@@ -86,15 +87,27 @@ app.put('/blog/:id', (req, res) => {
 })
 
 
-// DELETE /blog/:id -- DESTROY one drink and redirect to /drinks
+// // DELETE /blog/:id -- DESTROY one drink and redirect to /drinks
 
-  app.delete('/blog/:id', (req, res) => {
-    db.Blog.findByIdAndDelete(req.params.id)
-    .then(deletedItem => {
-      console.log(deletedItem)
-      res.redirect('/blog')
-    }).catch((err)=> console.log(err))
+//   app.delete('/blog/:id', (req, res) => {
+//     db.Blog.findByIdAndDelete(req.params.id)
+//     .then(deletedItem => {
+//       console.log(deletedItem)
+//       res.redirect('/blog')
+//     }).catch((err)=> console.log(err))
+//   })
+
+  // DELETE /blog/:id -- DESTROY one blog post, and redirect to /blog
+  app.delete('/blog/:id', async (req, res) => {
+    try {
+        await db.Blog.findByIdAndDelete(req.params.id)
+
+        res.redirect('/blog')
+    } catch (err) {
+        console.log(err)
+    }
   })
+
 
 
 
