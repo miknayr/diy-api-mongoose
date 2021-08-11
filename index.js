@@ -53,6 +53,7 @@ app.get('/blog/:id', (req, res) => {
 
 // POST /blog -- CREATE one post redirect to /blog
 app.post('/newpost', (req, res) => {
+  console.log("this is res.data: " + res.data)
   console.log('*** got a /newpost request: ', req.body, req.params, req.query)
   db.Blog.create({
     author: req.body.author,
@@ -61,7 +62,7 @@ app.post('/newpost', (req, res) => {
   })
   .then (() => {
     console.log('*** newpost created maybe, redirecting')
-    res.redirect('http://localhost:3000/')
+    res.redirect('http://localhost:3000/blog')
   })
   .catch (err=> console.log(err))
 
@@ -70,6 +71,7 @@ app.post('/newpost', (req, res) => {
 // PUT /blog/:id -- UPDATE one post and redirect to /blog
 
 app.put('/edit/:id', (req, res) => {
+  // console.log(req)
   console.log('*** got a /edit request: ', req.body, req.params, req.query)
   db.Blog.findById(req.params.id)
   .then(foundPost => {
