@@ -61,7 +61,7 @@ app.post('/newpost', (req, res) => {
   })
   .then (() => {
     console.log('*** newpost created maybe, redirecting')
-    res.redirect('http://localhost:3000/blog')
+    res.redirect('http://localhost:3000/')
   })
   .catch (err=> console.log(err))
 
@@ -86,17 +86,6 @@ app.put('/edit/:id', (req, res) => {
   .catch ((err) => console.log(err))
 })
 
-
-// // DELETE /blog/:id -- DESTROY one drink and redirect to /drinks
-
-//   app.delete('/blog/:id', (req, res) => {
-//     db.Blog.findByIdAndDelete(req.params.id)
-//     .then(deletedItem => {
-//       console.log(deletedItem)
-//       res.redirect('/blog')
-//     }).catch((err)=> console.log(err))
-//   })
-
   // DELETE /blog/:id -- DESTROY one blog post, and redirect to /blog
   app.delete('/blog/:id', async (req, res) => {
     try {
@@ -107,8 +96,6 @@ app.put('/edit/:id', (req, res) => {
         console.log(err)
     }
   })
-
-
 
 
 app.listen(PORT, () => {
