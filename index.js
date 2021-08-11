@@ -15,6 +15,7 @@ const cors = require('cors')
 
 // request body middleware
 app.use(express.urlencoded({ extended: false }))
+app.use(express.json());
 app.use(cors())
 
 // test index route / -- return a server message
@@ -51,7 +52,7 @@ app.get('/blog/:id', (req, res) => {
     .catch(err => console.log(err))
 })
 
-// POST /blog -- CREATE one post redirect to /blog
+// POST /newpost -- CREATE one post redirect to /blog
 app.post('/newpost', (req, res) => {
   console.log("this is res.data: " + res.data)
   console.log('*** got a /newpost request: ', req.body, req.params, req.query)
@@ -81,7 +82,7 @@ app.put('/edit/:id', (req, res) => {
 
     foundPost.save()
     .then(() => {
-      res.redirect('/blog')
+      res.redirect(200, '/blog')
     })
     .catch ((err) => console.log(err))
   })
